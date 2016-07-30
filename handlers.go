@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
 	"strconv"
 
 	"github.com/tarantool/go-tarantool"

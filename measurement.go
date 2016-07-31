@@ -2,12 +2,14 @@ package main
 
 import (
 	"errors"
+	"strings"
+	"strconv"
 )
 
 type Device struct {
 	MAC         string  `json:"mac"`
 	Temperature string  `json:"temperature"`
-	Humidity    float64 `json:"humidity"`
+	Humidity    string `json:"humidity"`
 	Lat         float64 `json:"lat"`
 	Lon         float64 `json:"lon"`
 }
@@ -39,6 +41,24 @@ func parseDevices(res [][]interface{}) (Devices, error) {
 			if !ok {
 				return nil, errors.New("Cannot parse temperature")
 			}
+		case "humidity":
+			device.Humidity, ok = item[2].(string)
+			if !ok {
+				return nil, errors.New("Cannot parse humidity")
+			}
+		case "latlon":
+			rawLatlon, ok := item[2].(string)
+			if !ok {
+				return nil, errors.New("Cannot parse latitude and longitude")
+			}
+			latlon := strings.Split(rawLatlon, ",")
+
+			device.Lat, _ = strconv.ParseFloat(latlon[0], 64)
+			device.Lat /= 10000000.0
+			device.Lon, _ = strconv.ParseFloat(latlon[1], 64)
+			device.Lon /= 10000000.0
+		default:
+			return nil, errors.New("Unknown measurement")
 		}
 	}
 

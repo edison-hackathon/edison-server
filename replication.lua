@@ -7,6 +7,6 @@ box.cfg{
     replication_source = "100.100.147.43:3301"
 }
 
-space = box.space.measurements
+devices = box.space.devices
 
 require('console').start()

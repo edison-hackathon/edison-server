@@ -9,13 +9,11 @@ import (
 )
 
 func main() {
-	server := "100.100.147.43:3301"
+	server := "100.100.157.192:3302"
 	opts := tarantool.Opts{
 		Timeout:       500 * time.Millisecond,
 		Reconnect:     1 * time.Second,
 		MaxReconnects: 3,
-		//User:          "test",
-		//Pass:          "test",
 	}
 	tarantoolConn, err := tarantool.Connect(server, opts)
 	if err != nil {
@@ -23,7 +21,7 @@ func main() {
 	}
 
 	h := handlers{tarantoolConn: tarantoolConn}
-	http.HandleFunc("/api/v1/measurements", h.getMeasurements)
+	http.HandleFunc("/api/v1/devices", h.getDevices)
 
 	http.ListenAndServe("0.0.0.0:8080", nil)
 }

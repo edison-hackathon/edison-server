@@ -13,7 +13,7 @@ type handlers struct {
 	tarantoolConn *tarantool.Connection
 }
 
-func (h handlers) getMeasurements(w http.ResponseWriter, r *http.Request) {
+func (h handlers) getDevices(w http.ResponseWriter, r *http.Request) {
 	offset, _ := strconv.ParseUint(
 		r.URL.Query().Get("offset"),
 		10,
@@ -29,11 +29,10 @@ func (h handlers) getMeasurements(w http.ResponseWriter, r *http.Request) {
 		limit = 10
 	}
 
-	spaceNo := uint32(512)
 	indexNo := uint32(0)
 
 	resp, err := h.tarantoolConn.Select(
-		spaceNo,
+		"devices",
 		indexNo,
 		uint32(offset),
 		uint32(limit),
@@ -45,10 +44,10 @@ func (h handlers) getMeasurements(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("Failed to select: %s", err.Error())
 	}
 
-	measurements, err := parseMeasurements(resp.Tuples())
+	devices, err := parseDevices(resp.Tuples())
 	if err != nil {
 		log.Fatalf("Cannot parse measurements: %s", err.Error())
 	}
 
-	json.NewEncoder(w).Encode(measurements)
+	json.NewEncoder(w).Encode(devices)
 }

@@ -2,14 +2,14 @@ package main
 
 import (
 	"errors"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type Device struct {
 	MAC         string  `json:"mac"`
 	Temperature string  `json:"temperature"`
-	Humidity    string `json:"humidity"`
+	Humidity    string  `json:"humidity"`
 	Lat         float64 `json:"lat"`
 	Lon         float64 `json:"lon"`
 }
